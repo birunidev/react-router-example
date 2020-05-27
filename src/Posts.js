@@ -3,18 +3,26 @@ import { Row, Col } from "react-bootstrap";
 import Post from "./Post";
 
 class Posts extends React.Component {
+  abortController = new AbortController();
   state = {
     posts: [],
-    loading: true
+    loading: false,
   };
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-        this.setState({ posts: res, loading: false });
+    this.setState({ loading: true });
+    fetch("https://jsonplaceholder.typicode.com/posts", {
+      signal: this.abortController.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ posts: data, loading: false });
       });
+  }
+
+  componentWillUnmount() {
+    console.log("unmount");
+    this.abortController.abort();
   }
 
   render() {
@@ -24,9 +32,9 @@ class Posts extends React.Component {
         {loading ? (
           <h2>Loading...</h2>
         ) : (
-          posts.map(post => {
+          posts.map((post, index) => {
             return (
-              <Col xs={12} md={4}>
+              <Col xs={12} md={3} lg={4} key={index}>
                 <Post id={post.id} title={post.title} body={post.body} />
               </Col>
             );

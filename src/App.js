@@ -1,23 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./styles.css";
 import { Container } from "react-bootstrap";
 import Posts from "./Posts";
 import SinglePost from "./SinglePost";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
+export default function App() {
+  return (
+    <div className="App">
+      <Container className="mt-5 ">
         <Router>
           <Switch>
-            <Route exact path="/" render={Posts} />
-            <Route path="/:id" render={SinglePost} />
+            <Route exact path="/" component={Posts} />
+            <Route exact path="/:id" component={SinglePost} />
           </Switch>
         </Router>
-        <Container className="mt-5 " />
-      </div>
-    );
-  }
+      </Container>
+    </div>
+  );
 }
-export default App;
